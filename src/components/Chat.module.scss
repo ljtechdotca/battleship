@@ -1,0 +1,32 @@
+.root {
+  @media (min-width: 1440px) {
+    border-left: 1px solid #dddddd;
+    max-width: 320px;
+  }
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.base {
+  min-height: 200px;
+  padding: 1rem;
+  overflow-y: scroll;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: calc(100vh - 319px);
+}
+
+.form {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  input {
+    max-width: unset;
+    width: 100%;
+  }
+}

@@ -1,0 +1,24 @@
+.root {
+  place-items: center center;
+  display: grid;
+  gap: 0.5rem;
+  &__primary {
+    @extend .root;
+  }
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  display: grid;
+  place-items: center center;
+  height: 2rem;
+  width: 2rem;
+  &__border {
+    height: 0.5rem;
+    width: 0.5rem;
+    border: 1px solid #ddd;
+  }
+}

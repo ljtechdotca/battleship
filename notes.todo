@@ -1,0 +1,16 @@
+✔ @low refactor App.jsx @done(22-06-17 09:19)
+✔ add tags to ships @done(22-06-16 09:10)
+✔ fix layout a little @done(22-06-17 11:19)
+✔ @today topBoard and bottomBoard are confusing, change to opponentBoard and ownerBoard @done(22-06-17 09:58)
+✔ @today change board sizes based on the game state @done(22-06-17 11:19)
+    case idle: no boards
+    case preparation: one large board (for the owner), none for viewers (show a players are preparing)
+    case active: one large board (of the opponents) and a small "healthbar" for your ships and grid.
+✔ @today render colored tiles where player ships are @done(22-06-17 13:32)
+    if you are in the active game state show where your fleet is located
+    ships needs to be replaced from 2's to actual ship values in order to recieve the proper color
+
+☐ @nextStream game.shoot
+    Now wait for room to notify you that it in active state.
+    If player want to move ships then execute "game.resetships" method, it will make him not ready to play.
+    When both players is ready use "game.shoot" with { x:integer, y:integer } to shoot.

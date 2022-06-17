@@ -1,0 +1,13 @@
+.root {
+  @media (min-width: 1024px) {
+    overflow: hidden;
+  }
+  color: #333333;
+  height: 100vh;
+}
+
+.error {
+  color: #ff0000;
+  text-align: center;
+  padding: 1rem;
+}

@@ -1,0 +1,12 @@
+.root {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 51px 1fr;
+}
+
+.base {
+  gap: 1rem;
+  display: grid;
+  grid-template-rows: 1fr 200px;
+  padding: 1rem;
+}

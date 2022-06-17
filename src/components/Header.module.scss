@@ -1,0 +1,19 @@
+.root {
+  text-align: center;
+  padding: 0.5rem 1rem;
+  display: flex;
+  width: 100%;
+  min-height: 51px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-weight: 600;
+  border-bottom: 1px solid #dddddd;
+  align-items: center;
+}
+
+.base {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #dddddd;
+}
+
+.base {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+.heading {
+  white-space: nowrap;
+}
