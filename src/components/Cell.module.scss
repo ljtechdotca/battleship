@@ -4,11 +4,48 @@
   font-weight: 600;
   height: 2rem;
   width: 2rem;
-  background-color: unset;
   border-radius: unset;
   line-height: 0.5;
-  // font-size: 8px;
-  color: #dddddd;
-  border-color: #dddddd;
+  border: 1px solid #dddddd;
   font-family: "Segoe UI Emoji";
+  &__0 {
+    @extend .root;
+    color: #dddddd;
+    background-color: transparent;
+  }
+  &__1 {
+    @extend .root;
+    color: #dddddd;
+    background-color: #f8f8f8;
+  }
+  &__3 {
+    @extend .root;
+    color: red;
+    background-color: #ffd9df;
+  }
+  &__5 {
+    @extend .root;
+    color: hsl(150, 50%, 50%);
+    background-color: hsl(150, 100%, 75%);
+  }
+  &__6 {
+    @extend .root;
+    color: hsl(180, 50%, 50%);
+    background-color: hsl(180, 100%, 75%);
+  }
+  &__7 {
+    @extend .root;
+    color: hsl(210, 50%, 50%);
+    background-color: hsl(210, 100%, 75%);
+  }
+  &__8 {
+    @extend .root;
+    color: hsl(240, 50%, 50%);
+    background-color: hsl(240, 100%, 75%);
+  }
+  &__9 {
+    @extend .root;
+    color: hsl(270, 50%, 50%);
+    background-color: hsl(270, 100%, 75%);
+  }
 }

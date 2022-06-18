@@ -1,9 +1,7 @@
 .root {
-  @media (min-width: 1440px) {
-    height: 200px;
-    border-left: 1px solid #dddddd;
-    overflow-y: scroll;
-  }
+  height: 200px;
+  border-left: 1px solid #dddddd;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

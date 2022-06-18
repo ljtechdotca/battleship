@@ -27,7 +27,6 @@ const Game = ({
       {room.opponent && (
         <div className={styles.base}>
           <Board
-            logs={logs}
             onCell={(event) =>
               onClick.onCell({
                 ...event,

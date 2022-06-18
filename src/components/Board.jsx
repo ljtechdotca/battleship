@@ -1,14 +1,11 @@
 import styles from "./Board.module.scss";
 import Grid from "./Grid";
 
-const Board = ({ logs, onCell, opponentBoard, ownerBoard, player, room }) => {
+const Board = ({ onCell, opponentBoard, ownerBoard, player, room }) => {
   const isOwner = player.id === room.owner.player.id;
 
   return (
     <div className={styles.root}>
-      <div className={styles.heading}>
-        {logs.length ? logs[0].message : "Waiting for players."}
-      </div>
       <div className={styles.base}>
         {isOwner && room.state === "preparation" && (
           <>

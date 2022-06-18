@@ -64,7 +64,6 @@ function onShip(event, webSocket, setShip) {
   setShip(event.value);
 }
 
-// @todo HANDLES ALL CELL CLICKS
 function onCell(
   { target: [i, j], player, room, ship, fleet, ownerBoard, opponentBoard },
   webSocket,
@@ -107,7 +106,9 @@ function onCell(
       break;
 
     case "active":
-      console.log("active");
+      if ((isOwner && room.isOwnerTurn) || (!isOwner && !room.isOwnerTurn)) {
+        send(webSocket, "game.shoot", { x: j, y: i });
+      }
       break;
 
     case "end":
@@ -131,9 +132,9 @@ function onReady(
   setOpponentBoard,
   setOwnerBoard
 ) {
-  const ships = createShips(event.board);
+  // const ships = createShips(event.board);
   // @tag DEFAULT SHIPS USED FOR TESTING
-  const shipsTest = [
+  const ships = [
     {
       x: 0,
       y: 0,
