@@ -1,4 +1,5 @@
 import styles from "./Header.module.scss";
+import Player from "./Player";
 
 const Header = ({ player, onSignOut }) => {
   return (
@@ -7,9 +8,7 @@ const Header = ({ player, onSignOut }) => {
       <div>
         {player && (
           <div className={styles.base}>
-            <b style={{ color: player.color }}>
-              {player.nickname}
-            </b>
+            <Player player={player} />
             <button onClick={onSignOut} className="small">
               Sign out
             </button>

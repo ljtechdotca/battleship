@@ -124,14 +124,7 @@ function onNotReady(event, webSocket) {
   send(webSocket, "game.resetships");
 }
 
-function onReady(
-  event,
-  webSocket,
-  setError,
-  setFleet,
-  setOpponentBoard,
-  setOwnerBoard
-) {
+function onReady(event, webSocket) {
   // const ships = createShips(event.board);
   // @tag DEFAULT SHIPS USED FOR TESTING
   const ships = [
@@ -182,35 +175,7 @@ function onReady(
       ships,
     });
   } else {
-    setError("Invalid ship placement. Reseting now.");
-    setFleet({
-      destroyer: {
-        name: "Destroyer",
-        size: 2,
-        value: 5,
-      },
-      cruiser: {
-        name: "Cruiser",
-        size: 3,
-        value: 6,
-      },
-      submarine: {
-        name: "Submarine",
-        size: 3,
-        value: 7,
-      },
-      battleship: {
-        name: "Battleship",
-        size: 4,
-        value: 8,
-      },
-      carrier: {
-        name: "Carrier",
-        size: 5,
-        value: 9,
-      },
-    });
-    setOwnerBoard(event.room.owner.board);
+    send(webSocket, "game.resetships");
   }
 }
 

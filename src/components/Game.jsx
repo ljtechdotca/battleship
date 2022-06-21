@@ -26,23 +26,25 @@ const Game = ({
       />
       {room.opponent && (
         <div className={styles.base}>
-          <Board
-            onCell={(event) =>
-              onClick.onCell({
-                ...event,
-                fleet,
-                opponentBoard,
-                ownerBoard,
-                player,
-                room,
-                ship,
-              })
-            }
-            opponentBoard={opponentBoard}
-            ownerBoard={ownerBoard}
-            player={player}
-            room={room}
-          />
+          {room.state !== "end" && (
+            <Board
+              onCell={(event) =>
+                onClick.onCell({
+                  ...event,
+                  fleet,
+                  opponentBoard,
+                  ownerBoard,
+                  player,
+                  room,
+                  ship,
+                })
+              }
+              opponentBoard={opponentBoard}
+              ownerBoard={ownerBoard}
+              player={player}
+              room={room}
+            />
+          )}
           <Console logs={logs} />
         </div>
       )}

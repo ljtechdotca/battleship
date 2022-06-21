@@ -47,16 +47,22 @@ const Toolbar = ({
           </button>
         )}
         {isPlaying && room.state === "preparation" && (
-          <button className="small purple" onClick={onClick.onNotReady}>
+          <button
+            className="small purple"
+            onClick={() =>
+              onClick.onNotReady({
+                opponentBoard,
+                ownerBoard,
+              })
+            }
+          >
             Reset
           </button>
         )}
         {isPlaying && !isReady && room.state === "preparation" && (
           <button
             className="small purple"
-            onClick={() =>
-              onClick.onReady({ board: isOwner ? ownerBoard : opponentBoard })
-            }
+            onClick={() => onClick.onReady({ opponentBoard, ownerBoard })}
           >
             Ready for battle
           </button>

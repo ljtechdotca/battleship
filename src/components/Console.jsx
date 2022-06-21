@@ -16,22 +16,7 @@ const Console = ({ logs }) => {
   return (
     <div className={styles.root} ref={consoleRef}>
       {logs.map((log) => (
-        <div key={log.id}>
-          <span className="small">{`${new Date(log.datetime).toLocaleTimeString(
-            ["en-GB"],
-            { hour: "2-digit", minute: "2-digit" }
-          )} `}</span>
-          <span>
-            <b
-              style={{
-                color: log.player.color,
-              }}
-            >
-              {`${log.player.nickname}: `}
-            </b>
-          </span>
-          <span>{log.message}</span>
-        </div>
+        <div key={log.id}>{log.element}</div>
       ))}
     </div>
   );

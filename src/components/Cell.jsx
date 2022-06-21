@@ -3,7 +3,9 @@ import styles from "./Cell.module.scss";
 const values = {
   0: "~",
   1: "☁",
+  2: "✨",
   3: "📍",
+  4: "🔥",
   5: "D",
   6: "C",
   7: "S",

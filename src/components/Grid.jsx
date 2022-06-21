@@ -1,5 +1,6 @@
 import Cell from "./Cell";
 import styles from "./Grid.module.scss";
+import Player from "./Player";
 
 const yScale = "ABCDEFGHIJ".split("");
 const xScale = "0123456789".split("");
@@ -11,7 +12,7 @@ const Grid = ({ board, onCell, player, primary }) => {
       style={{ borderColor: player.color }}
     >
       <div>
-        <b style={{ color: player.color }}>{player.nickname}</b>
+        <Player player={player} />
       </div>
       <div>
         {board &&

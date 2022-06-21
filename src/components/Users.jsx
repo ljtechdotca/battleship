@@ -1,3 +1,4 @@
+import Player from "./Player";
 import styles from "./Users.module.scss";
 
 const Users = ({ room }) => {
@@ -6,30 +7,12 @@ const Users = ({ room }) => {
       <div>
         <div>Owner</div>
         <div>
-          <b
-            style={{
-              color: room.owner.player.color,
-            }}
-          >
-            {room.owner.player.nickname}
-          </b>
+          <Player player={room.owner.player} />
         </div>
       </div>
       <div>
         <div>Opponent</div>
-        <div>
-          {room.opponent ? (
-            <b
-              style={{
-                color: room.opponent.player.color,
-              }}
-            >
-              {room.opponent.player.nickname}
-            </b>
-          ) : (
-            <b>No one</b>
-          )}
-        </div>
+        <div>{room.opponent && <Player player={room.opponent.player} />}</div>
       </div>
       <div>
         <div>Viewers</div>

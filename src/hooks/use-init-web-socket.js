@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Player from "../components/Player";
 import onClickMethods from "../lib/events/on-click-methods";
 import send from "../lib/server/send";
 
@@ -15,20 +16,43 @@ const gridYScale = {
   9: "J",
 };
 
-const gridXScale = {
-  0: 9,
-  1: 8,
-  2: 7,
-  3: 6,
-  4: 5,
-  5: 4,
-  6: 3,
-  7: 2,
-  8: 1,
-  9: 0,
+const battlebot = {
+  id: 9999,
+  nickname: "🤖 Battlebot",
+  color: "#000000",
 };
 
 const url = "wss://battleship.kanawanagasaki.ru/ws";
+
+function initFleet() {
+  return {
+    destroyer: {
+      name: "Destroyer",
+      size: 2,
+      value: 5,
+    },
+    cruiser: {
+      name: "Cruiser",
+      size: 3,
+      value: 6,
+    },
+    submarine: {
+      name: "Submarine",
+      size: 3,
+      value: 7,
+    },
+    battleship: {
+      name: "Battleship",
+      size: 4,
+      value: 8,
+    },
+    carrier: {
+      name: "Carrier",
+      size: 5,
+      value: 9,
+    },
+  };
+}
 
 function playSfx(event) {
   let url = "";
@@ -61,17 +85,26 @@ function playSfx(event) {
   sfx.play();
 }
 
-function createLog(
-  event,
-  index,
-  message,
-  player = { id: 9999, nickname: "🔴 SYSTEM" }
-) {
+function createLog(event, index, children) {
+  const id = `${event}-${index}`;
+  const date = new Date().toISOString();
+
   return {
-    id: `${event}-${index}`,
-    datetime: new Date().toISOString(),
-    player: player,
-    message: message,
+    id: id,
+    element: (
+      <span>
+        <span>
+          <small className="small">{`${new Date(date).toLocaleTimeString(
+            ["en-GB"],
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          )}`}</small>{" "}
+          {children}
+        </span>
+      </span>
+    ),
   };
 }
 
@@ -85,34 +118,98 @@ const useInitWebSocket = () => {
   const [ownerBoard, setOwnerBoard] = useState(null);
   const [opponentBoard, setOpponentBoard] = useState(null);
   const [ship, setShip] = useState(null);
-  const [fleet, setFleet] = useState({
-    destroyer: {
-      name: "Destroyer",
-      size: 2,
-      value: 5,
-    },
-    cruiser: {
-      name: "Cruiser",
-      size: 3,
-      value: 6,
-    },
-    submarine: {
-      name: "Submarine",
-      size: 3,
-      value: 7,
-    },
-    battleship: {
-      name: "Battleship",
-      size: 4,
-      value: 8,
-    },
-    carrier: {
-      name: "Carrier",
-      size: 5,
-      value: 9,
-    },
-  });
+  const [fleet, setFleet] = useState(initFleet());
   const [webSocket, setWebSocket] = useState(null);
+
+  function handleShot(event, args) {
+    switch (event) {
+      case "shoot":
+        if (args.success) {
+          if (args.isHit) {
+            playSfx("hit");
+            updateLogs(
+              "game.shoot",
+              <span>
+                <Player player={args.shooter} /> fired a shot at the position{" "}
+                {"{"}
+                {args.x}, {gridYScale[args.y]}
+                {"}"} and hit an enemy ship.
+              </span>
+            );
+            updateLogs(
+              "game.shoot",
+              <span>
+                <Player player={args.shooter} /> is ready to fire.
+              </span>
+            );
+          } else {
+            playSfx("miss");
+            updateLogs(
+              "game.shoot",
+              <span>
+                <Player player={args.shooter} /> fired a shot at the position{" "}
+                {"{"}
+                {args.x}, {gridYScale[args.y]}
+                {"}"} and missed.
+              </span>
+            );
+            updateLogs(
+              "game.shoot",
+              <span>
+                <Player player={args.shooter} /> round ends.
+              </span>
+            );
+          }
+        } else {
+          updateLogs(
+            "game.shoot",
+            <span>
+              <Player player={battlebot} /> {args.message}. hi world????
+            </span>
+          );
+        }
+        break;
+      case "onshoot":
+        if (args.isHit) {
+          playSfx("hit");
+          updateLogs(
+            "game.onshoot",
+            <span>
+              <Player player={args.shooter} /> fired a shot at the position{" "}
+              {"{"}
+              {args.x}, {gridYScale[args.y]}
+              {"}"} and hit an enemy ship.
+            </span>
+          );
+          updateLogs(
+            "game.onshoot",
+            <span>
+              <Player player={args.shooter} /> is ready to fire.
+            </span>
+          );
+        } else {
+          playSfx("miss");
+          updateLogs(
+            "game.onshoot",
+            <span>
+              <Player player={args.shooter} /> fired a shot at the position{" "}
+              {"{"}
+              {args.x}, {gridYScale[args.y]}
+              {"}"} and missed.
+            </span>
+          );
+          updateLogs(
+            "game.onshoot",
+            <span>
+              <Player player={args.shooter} /> round ends.
+            </span>
+          );
+        }
+        break;
+      default:
+        break;
+    }
+  }
 
   function updateBoards(args) {
     if (args.room.opponent) {
@@ -134,12 +231,9 @@ const useInitWebSocket = () => {
     });
   }
 
-  function updateLogs(event, message, player) {
+  function updateLogs(event, children) {
     setLogs((state) => {
-      const newLogs = [
-        ...state,
-        createLog(event, state.length, message, player),
-      ];
+      const newLogs = [...state, createLog(event, state.length, children)];
       while (newLogs.length > 40) newLogs.shift();
       return newLogs;
     });
@@ -152,10 +246,10 @@ const useInitWebSocket = () => {
     const newWebSocket = new WebSocket(url);
 
     newWebSocket.onmessage = (event) => {
-      console.log(`[🧶] MESSAGE`, event);
-
       const data = JSON.parse(event.data);
       const { method, args } = data;
+
+      console.log(`[🧶] MESSAGE`, { event: data });
 
       switch (method) {
         /**
@@ -231,13 +325,21 @@ const useInitWebSocket = () => {
           updateBoards(args);
           updateLogs(
             "challenge",
-            `has issued a challenge against ${args.room.owner.player.nickname}.`,
-            args.room.opponent.player
+            <span>
+              <Player player={args.room.opponent.player} /> has issued a
+              challenge against <Player player={args.room.owner.player} />
+            </span>
           );
           updateLogs(
             "challenge",
-            `Entering preparation state. Please setup your ships.`
+            <span>
+              <Player player={battlebot} />: Game is now ready. Prepare your
+              warships for battle.
+            </span>
           );
+          break;
+
+        case "room.onchallenge":
           break;
 
         /**
@@ -295,29 +397,40 @@ const useInitWebSocket = () => {
           switch (args.room.state) {
             case "idle":
               setOpponentBoard(null);
+              setRoom(args.room);
               break;
             case "preparation":
-              if (!args.room.owner.isReady && !args.room.opponent.isReady) {
-                updateLogs(
-                  "challenge",
-                  `has issued a challenge against ${args.room.owner.player.nickname}.`,
-                  args.room.opponent.player
-                );
-                updateLogs(
-                  "challenge",
-                  `Entering preparation state. Please setup your ships.`
-                );
-                updateBoards(args);
-              }
+              setRoom((room) => {
+                if (room.state !== args.room.state) {
+                  updateLogs(
+                    "challenge",
+                    <span>
+                      <Player player={args.room.opponent.player} /> has issued a
+                      challenge against{" "}
+                      <Player player={args.room.owner.player} />
+                    </span>
+                  );
+                  updateLogs(
+                    "challenge",
+                    <span>
+                      <Player player={battlebot} />: Game is now ready. Prepare
+                      your warships for battle.
+                    </span>
+                  );
+                  updateBoards(args);
+                }
+                return args.room;
+              });
               break;
             case "active":
+              setRoom(args.room);
               break;
             case "end":
+              setRoom(args.room);
               break;
             default:
               break;
           }
-          setRoom(args.room);
           break;
 
         /**
@@ -329,60 +442,35 @@ const useInitWebSocket = () => {
           break;
 
         /**
+         * When the player hits reset. Update the boards and room.
+         */
+        case "game.resetships":
+          setFleet((fleet) => {
+            const newFleet = initFleet();
+            setShip((ship) => {
+              const newShip = newFleet[ship.name.toLowerCase()];
+              return newShip;
+            });
+            return newFleet;
+          });
+          setRoom(args.room);
+          updateBoards(args);
+          break;
+
+        /**
          * When the player shoots. Update the boards, logs, and play sfx.
          */
         case "game.shoot":
-          if (args.success) {
-            if (args.isHit) {
-              playSfx("hit");
-              updateLogs(
-                "game.shoot",
-                `You fired a shot at the position {${args.x}, ${
-                  gridYScale[args.y]
-                }} and hit, you shoot again`,
-                args.shooter
-              );
-              updateLogs("game.onshoot", `Is firing again...`, args.shooter);
-            } else {
-              playSfx("miss");
-              updateLogs(
-                "game.shoot",
-                `You fired a shot at the position {${args.x}, ${
-                  gridYScale[args.y]
-                }} and missed.`,
-                args.shooter
-              );
-              updateLogs("game.onshoot", `Is done firing...`, args.shooter);
-            }
-            updateBoards(args);
-          } else {
-            updateLogs("game.shoot", args.message);
-          }
+          handleShot("shoot", args);
+          setRoom(args.room);
+          updateBoards(args);
           break;
 
         /**
          * When another player shoots. Update the boards, logs and play sfx.
          */
         case "game.onshoot":
-          if (args.isHit) {
-            playSfx("hit");
-            updateLogs(
-              "game.onshoot",
-              `Just fired a shot {${args.x}, ${gridYScale[args.y]}} and hit.`,
-              args.shooter
-            );
-            updateLogs("game.onshoot", `Is firing again...`, args.shooter);
-          } else {
-            playSfx("miss");
-            updateLogs(
-              "game.onshoot",
-              `Just fired a shot {${args.x}, ${
-                gridYScale[args.y]
-              }} and missed.`,
-              args.shooter
-            );
-            updateLogs("game.onshoot", `Is done firing...`, args.shooter);
-          }
+          handleShot("onshoot", args);
           setRoom(args.room);
           updateBoards(args);
           break;
@@ -391,7 +479,14 @@ const useInitWebSocket = () => {
          * When the game ends. Update...
          */
         case "game.ongameover":
-          updateLogs("game.ongameover", `The game has ended`);
+          console.log("on game over", { args });
+          updateLogs(
+            "game.ongameover",
+            <span>
+              <Player player={battlebot} />: GAME OVER,{" "}
+              <Player player={args.winner} /> has won! 🥳
+            </span>
+          );
           setPlayer((state) => {
             if (state.id === args.winner.id) {
               playSfx("won");
@@ -435,15 +530,7 @@ const useInitWebSocket = () => {
         setShip
       ),
     onNotReady: (event) => onClickMethods.onNotReady(event, webSocket),
-    onReady: (event) =>
-      onClickMethods.onReady(
-        event,
-        webSocket,
-        setError,
-        setFleet,
-        setOpponentBoard,
-        setOwnerBoard
-      ),
+    onReady: (event) => onClickMethods.onReady(event, webSocket),
     onSignIn: (event) => onClickMethods.onSignIn(event, webSocket),
     onSignOut: (event) => onClickMethods.onSignOut(event, webSocket),
     onChat: (event) => onClickMethods.onChat(event, webSocket),

@@ -1,3 +1,4 @@
+import Player from "./Player";
 import styles from "./Rooms.module.scss";
 
 const Rooms = ({ rooms, onCreate, onJoin }) => {
@@ -10,7 +11,7 @@ const Rooms = ({ rooms, onCreate, onJoin }) => {
       </p>
       {rooms.map(({ id, owner }) => (
         <div className={styles.base} key={id}>
-          <b style={{ color: owner.player.color }}>{owner.player.nickname}</b>
+          <Player player={owner.player} />
           <button
             className="outline purple small"
             onClick={() => onJoin({ roomId: id })}

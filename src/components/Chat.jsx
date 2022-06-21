@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Chat.module.scss";
+import Player from "./Player";
 
 const Chat = ({ chat, onChat, room }) => {
   const [value, setValue] = useState("");
@@ -32,13 +33,7 @@ const Chat = ({ chat, onChat, room }) => {
               })} `}
             </span>
             <span>
-              <b
-                style={{
-                  color: chatMessage.player.color,
-                }}
-              >
-                {chatMessage.player.nickname}
-              </b>
+              <Player player={chatMessage.player} />
               {": "}
             </span>
             <span>{chatMessage.message}</span>

@@ -18,7 +18,17 @@
     color: #dddddd;
     background-color: #f8f8f8;
   }
+  &__2 {
+    @extend .root;
+    color: red;
+    background-color: #ffd9df;
+  }
   &__3 {
+    @extend .root;
+    color: red;
+    background-color: #ffd9df;
+  }
+  &__4 {
     @extend .root;
     color: red;
     background-color: #ffd9df;
